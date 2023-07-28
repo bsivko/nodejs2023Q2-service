@@ -3,6 +3,7 @@ import { Favorite } from './entities/favorite.entity';
 import { AlbumsService } from 'src/albums/albums.service';
 import { TracksService } from 'src/tracks/tracks.service';
 import { ArtistsService } from 'src/artists/artists.service';
+import { FavoriteResponseDto } from './dto/get-favorites.dto';
 
 @Injectable()
 export class FavoritesService {
@@ -31,7 +32,7 @@ export class FavoritesService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
     FavoritesService.favorites.albums = FavoritesService.favorites.albums.filter(function (item) {
-      return item !== id
+      return ((item !== id) && (item !== null))
     })
   }
 
@@ -41,7 +42,7 @@ export class FavoritesService {
       return;
 
     FavoritesService.favorites.albums = FavoritesService.favorites.albums.filter(function (item) {
-      return item !== id
+      return ((item !== id) && (item !== null))
     })
   }
 
@@ -51,7 +52,7 @@ export class FavoritesService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
     FavoritesService.favorites.artists = FavoritesService.favorites.artists.filter(function (item) {
-      return item !== id
+      return ((item !== id) && (item !== null))
     })
   }
 
@@ -91,7 +92,30 @@ export class FavoritesService {
     FavoritesService.favorites.albums.push(id);
   }
 
-  findAll(): Favorite {
-    return FavoritesService.favorites;
+  findAll(): FavoriteResponseDto {
+
+    let result = new FavoriteResponseDto();
+
+    FavoritesService.favorites.albums.forEach((o) => {
+      const x = this.albumsService.findOne(o);
+      if (x !== null && x !== undefined)
+        result.albums.push(x);
+    });
+
+    result.artists = [];
+    FavoritesService.favorites.artists.forEach((o) => {
+      const x = this.artistsService.findOne(o);
+      if (x !== null && x !== undefined)
+        result.artists.push(x);
+    });
+
+    result.tracks = [];
+    FavoritesService.favorites.tracks.forEach((o) => {
+      const x = TracksService.findOne(o);
+      if (x !== null && x !== undefined)
+        result.tracks.push(x);
+    });
+
+    return result;
   }
 }

@@ -3,6 +3,7 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { ReplaceTrackDto } from './dto/update-track.dto';
 import { Track, replaceTrack } from './entities/track.entity';
 import * as crypto from 'crypto';
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class TracksService {

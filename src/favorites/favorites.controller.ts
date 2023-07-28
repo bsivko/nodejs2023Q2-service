@@ -3,6 +3,7 @@ import { FavoritesService } from './favorites.service';
 import { Favorite } from './entities/favorite.entity';
 import { isUUID } from 'class-validator';
 import { TracksService } from 'src/tracks/tracks.service';
+import { FavoriteResponseDto } from './dto/get-favorites.dto';
 
 @Controller('favs')
 export class FavoritesController {
@@ -10,7 +11,7 @@ export class FavoritesController {
 
   @Get()
   @Header("content-type", "application/json")
-  findAll(): Favorite {
+  findAll(): FavoriteResponseDto {
     return this.favoritesService.findAll();
   }
 
