@@ -62,8 +62,12 @@ export class UsersController {
     return "Password had been changed.";
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    if (!isUUID(id))
+      throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
+
+    return this.usersService.remove(id);
   }
 }

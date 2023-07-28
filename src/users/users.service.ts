@@ -7,7 +7,7 @@ import * as crypto from 'crypto';
 @Injectable()
 export class UsersService {
 
-  private readonly users: User[] = [];
+  private users: User[] = [];
 
   create(createUserDto: CreateUserDto) {
     const now = Date.now();
@@ -44,7 +44,17 @@ export class UsersService {
     return o;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    let o = this.users.find((p) => p.id === id);
+    if (o === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+
+
+    this.users = this.users.filter(function (item) {
+      return item.id !== id
+    })
+
+    return `User #${id} had been deleted.`;
   }
 }
