@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from "./dto/create-user.dto";
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { isUUID } from '../utils/uuid';
 
 @Controller('user')
 export class UsersController {
@@ -20,7 +32,14 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    if (!isUUID(id)) {
+      throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
+    }
+    const result = this.usersService.findOne(id);
+    if (result === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    return result;
   }
 
   @Patch(':id')
