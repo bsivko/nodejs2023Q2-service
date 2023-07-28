@@ -49,8 +49,6 @@ export class UsersService {
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-
-
     this.users = this.users.filter(function (item) {
       return item.id !== id
     })
