@@ -9,10 +9,11 @@ import {
   HttpCode,
   HttpStatus,
   HttpException,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { isUUID } from '../utils/uuid';
 import { User, UserResponse } from './entities/user.entity';
 import { Logger } from '@nestjs/common';
@@ -49,9 +50,16 @@ export class UsersController {
     return new UserResponse(result);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
+    if (!isUUID(id))
+      throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
+
+    const result = this.usersService.updatePassword(id, updatePasswordDto);
+    if (result === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    return "Password had been changed.";
   }
 
   @Delete(':id')

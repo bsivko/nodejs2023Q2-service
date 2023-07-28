@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as crypto from 'crypto';
 
@@ -27,12 +27,21 @@ export class UsersService {
 
   findOne(id: string): User {
     const o = this.users.find((p) => p.id === id);
-    console.log(o);
     return o;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    let o = this.users.find((p) => p.id === id);
+    if (o === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    if (updatePasswordDto.oldPassword !== o.password)
+      throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
+
+    o.version++;
+    o.updatedAt = Date.now();
+
+    return o;
   }
 
   remove(id: number) {
