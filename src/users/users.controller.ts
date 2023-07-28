@@ -26,7 +26,7 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   @Header("content-type", "application/json")
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return new UserResponse(this.usersService.create(createUserDto));
   }
 
   @Get()
@@ -63,7 +63,7 @@ export class UsersController {
     if (result === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    return "Password had been changed.";
+    return new UserResponse(result);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

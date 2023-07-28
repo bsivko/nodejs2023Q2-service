@@ -56,7 +56,7 @@ export class FavoritesService {
   }
 
   addTrack(id: string) {
-    if (this.tracksService.findOne(id) === undefined) {
+    if (TracksService.findOne(id) === undefined) {
       throw new HttpException('Track is not found', HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

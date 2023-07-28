@@ -4,9 +4,11 @@ import { ReplaceAlbumDto, UpdateAlbumDto } from './dto/update-album.dto';
 import { Album, replaceAlbum } from './entities/album.entity';
 import * as crypto from 'crypto';
 import { FavoritesService } from 'src/favorites/favorites.service';
+import { TracksService } from 'src/tracks/tracks.service';
 
 @Injectable()
 export class AlbumsService {
+
   private static albums: Album[] = [];
 
   create(createAlbumDto: CreateAlbumDto) {
@@ -42,11 +44,19 @@ export class AlbumsService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
     FavoritesService.removeAlbumIfExist(id);
+    TracksService.removeAlumId(id);
 
     AlbumsService.albums = AlbumsService.albums.filter(function (item) {
       return item.id !== id
     })
 
     return `Artist #${id} had been deleted.`;
+  }
+
+  static removeArtistId(id: string) {
+    AlbumsService.albums.forEach((o) => {
+      if (o.artistId === id)
+        o.artistId = null;
+    });
   }
 }

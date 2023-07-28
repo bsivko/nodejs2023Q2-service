@@ -22,11 +22,12 @@ export class TracksController {
   }
 
   @Get(':id')
+  @Header("content-type", "application/json")
   findOne(@Param('id') id: string) {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
 
-    const result = this.tracksService.findOne(id);
+    const result = TracksService.findOne(id);
     if (result === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 

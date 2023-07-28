@@ -6,6 +6,7 @@ import * as crypto from 'crypto';
 
 @Injectable()
 export class TracksService {
+
   private static tracks: Track[] = [];
 
   create(createTrackDto: CreateTrackDto) {
@@ -21,7 +22,7 @@ export class TracksService {
     return TracksService.tracks;
   }
 
-  findOne(id: string): Track {
+  static findOne(id: string): Track {
     return TracksService.tracks.find((p) => p.id === id);
   }
 
@@ -45,5 +46,19 @@ export class TracksService {
     })
 
     return `Track #${id} had been deleted.`;
+  }
+
+  static removeAlumId(id: string) {
+    TracksService.tracks.forEach((o) => {
+      if (o.albumId === id)
+        o.albumId = null;
+    });
+  }
+
+  static removeArtistId(id: string) {
+    TracksService.tracks.forEach((o) => {
+      if (o.artistId === id)
+        o.artistId = null;
+    });
   }
 }

@@ -3,6 +3,8 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { ReplaceArtistDto, UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist, replaceArtist } from './entities/artist.entity';
 import * as crypto from 'crypto';
+import { TracksService } from 'src/tracks/tracks.service';
+import { AlbumsService } from 'src/albums/albums.service';
 
 @Injectable()
 export class ArtistsService {
@@ -44,6 +46,9 @@ export class ArtistsService {
     ArtistsService.artists = ArtistsService.artists.filter(function (item) {
       return item.id !== id
     })
+
+    AlbumsService.removeArtistId(id);
+    TracksService.removeArtistId(id);
 
     return `Artist #${id} had been deleted.`;
   }
