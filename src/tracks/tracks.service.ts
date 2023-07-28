@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
-import { UpdateTrackDto } from './dto/update-track.dto';
-import { Track } from './entities/track.entity';
+import { ReplaceTrackDto } from './dto/update-track.dto';
+import { Track, replaceTrack } from './entities/track.entity';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class TracksService {
@@ -23,8 +24,14 @@ export class TracksService {
     return this.tracks.find((p) => p.id === id);
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  replace(id: string, replaceTrackDto: ReplaceTrackDto) {
+    let o = this.tracks.find((p) => p.id === id);
+    if (o === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    replaceTrack(o, replaceTrackDto);
+
+    return `Track #${id} had been replaced.`;
   }
 
   remove(id: string) {

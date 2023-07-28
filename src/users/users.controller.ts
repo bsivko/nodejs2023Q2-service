@@ -16,7 +16,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { isUUID } from '../utils/uuid';
 import { User, UserResponse } from './entities/user.entity';
-import { Logger } from '@nestjs/common';
 
 @Controller('user')
 export class UsersController {

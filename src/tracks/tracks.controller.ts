@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, HttpException, Put } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
-import { UpdateTrackDto } from './dto/update-track.dto';
+import { ReplaceTrackDto, UpdateTrackDto } from './dto/update-track.dto';
 import { isUUID } from 'class-validator';
 
 @Controller('track')
@@ -24,7 +24,19 @@ export class TracksController {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
 
-    return this.tracksService.findOne(id);
+    const result = this.tracksService.findOne(id);
+    if (result === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    return result;
+  }
+
+  @Put(':id')
+  replace(@Param('id') id: string, @Body() replaceTrackDto: ReplaceTrackDto) {
+    if (!isUUID(id))
+      throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
+
+    return this.tracksService.replace(id, replaceTrackDto);
   }
 
   @Delete(':id')
