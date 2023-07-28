@@ -18,14 +18,14 @@ export class UsersService {
       createdAt: now,
       updatedAt: now,
     });
-    return `This action adds a new user ${createUserDto.login}`;
+    return `Added a new user ${createUserDto.login}`;
   }
 
-  findAll() {
+  findAll(): User[] {
     return this.users;
   }
 
-  findOne(id: string) {
+  findOne(id: string): User {
     const o = this.users.find((p) => p.id === id);
     console.log(o);
     return o;

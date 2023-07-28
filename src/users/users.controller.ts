@@ -14,6 +14,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { isUUID } from '../utils/uuid';
+import { User, UserResponse } from './entities/user.entity';
+import { Logger } from '@nestjs/common';
 
 @Controller('user')
 export class UsersController {
@@ -26,12 +28,17 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(): UserResponse[] {
+    const all = this.usersService.findAll();
+    let result = [];
+    all.forEach(element => {
+      result.push(new UserResponse(element));
+    });
+    return result;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): UserResponse {
     if (!isUUID(id)) {
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
     }
@@ -39,7 +46,7 @@ export class UsersController {
     if (result === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    return result;
+    return new UserResponse(result);
   }
 
   @Patch(':id')
