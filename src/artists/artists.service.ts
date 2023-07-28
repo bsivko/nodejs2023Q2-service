@@ -10,12 +10,12 @@ export class ArtistsService {
   private static artists: Artist[] = [];
 
   create(createArtistDto: CreateArtistDto) {
-    const id = crypto.randomUUID();
-    ArtistsService.artists.push({
+    const o = {
       ...createArtistDto,
-      id: id
-    });
-    return `Added a new artist ${createArtistDto.name} : ${id}`;
+      id: crypto.randomUUID()
+    };
+    ArtistsService.artists.push(o);
+    return o;
   }
 
   findAll(): Artist[] {
@@ -33,7 +33,7 @@ export class ArtistsService {
 
     replaceArtist(o, replaceArtistDto);
 
-    return `Artist #${id} had been replaced.`;
+    return o;
   }
 
   remove(id: string) {

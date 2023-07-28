@@ -10,12 +10,13 @@ import {
   HttpStatus,
   HttpException,
   Put,
+  Header,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { isUUID } from '../utils/uuid';
-import { User, UserResponse } from './entities/user.entity';
+import { UserResponse } from './entities/user.entity';
 
 @Controller('user')
 export class UsersController {
@@ -23,11 +24,13 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto): string {
+  @Header("content-type", "application/json")
+  create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
+  @Header("content-type", "application/json")
   findAll(): UserResponse[] {
     const all = this.usersService.findAll();
     let result = [];
@@ -38,6 +41,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Header("content-type", "application/json")
   findOne(@Param('id') id: string): UserResponse {
     if (!isUUID(id)) {
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
@@ -50,6 +54,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @Header("content-type", "application/json")
   update(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
@@ -63,6 +68,7 @@ export class UsersController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
+  @Header("content-type", "application/json")
   remove(@Param('id') id: string) {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);

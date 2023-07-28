@@ -7,7 +7,7 @@ import { ArtistsService } from 'src/artists/artists.service';
 @Injectable()
 export class FavoritesService {
 
-  private favorites: Favorite = new Favorite();
+  private static favorites: Favorite = new Favorite();
   @Inject(TracksService)
   private readonly tracksService: TracksService;
   @Inject(AlbumsService)
@@ -16,31 +16,41 @@ export class FavoritesService {
   private readonly artistsService: ArtistsService;
 
   removeTrack(id: string) {
-    let o = this.favorites.tracks.find((p) => p === id);
+    let o = FavoritesService.favorites.tracks.find((p) => p === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    this.favorites.tracks = this.favorites.tracks.filter(function (item) {
+    FavoritesService.favorites.tracks = FavoritesService.favorites.tracks.filter(function (item) {
       return item !== id
     })
   }
 
   removeAlbum(id: string) {
-    let o = this.favorites.albums.find((p) => p === id);
+    let o = FavoritesService.favorites.albums.find((p) => p === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    this.favorites.albums = this.favorites.albums.filter(function (item) {
+    FavoritesService.favorites.albums = FavoritesService.favorites.albums.filter(function (item) {
+      return item !== id
+    })
+  }
+
+  static removeAlbumIfExist(id: string) {
+    let o = FavoritesService.favorites.albums.find((p) => p === id);
+    if (o === undefined)
+      return;
+
+    FavoritesService.favorites.albums = FavoritesService.favorites.albums.filter(function (item) {
       return item !== id
     })
   }
 
   removeArtist(id: string) {
-    let o = this.favorites.artists.find((p) => p === id);
+    let o = FavoritesService.favorites.artists.find((p) => p === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    this.favorites.artists = this.favorites.artists.filter(function (item) {
+    FavoritesService.favorites.artists = FavoritesService.favorites.artists.filter(function (item) {
       return item !== id
     })
   }
@@ -50,11 +60,11 @@ export class FavoritesService {
       throw new HttpException('Track is not found', HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    let o = this.favorites.tracks.find((p) => p === id);
+    let o = FavoritesService.favorites.tracks.find((p) => p === id);
     if (o !== undefined)
       throw new HttpException('Track is already in favorites', HttpStatus.UNPROCESSABLE_ENTITY);
 
-    this.favorites.tracks.push(id);
+    FavoritesService.favorites.tracks.push(id);
   }
 
   addArtist(id: string) {
@@ -62,11 +72,11 @@ export class FavoritesService {
       throw new HttpException('Artist is not found', HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    let o = this.favorites.artists.find((p) => p === id);
+    let o = FavoritesService.favorites.artists.find((p) => p === id);
     if (o !== undefined)
       throw new HttpException('Track is already in artists', HttpStatus.UNPROCESSABLE_ENTITY);
 
-    this.favorites.artists.push(id);
+    FavoritesService.favorites.artists.push(id);
   }
 
   addAlbum(id: string) {
@@ -74,14 +84,14 @@ export class FavoritesService {
       throw new HttpException('Album is not found', HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    let o = this.favorites.albums.find((p) => p === id);
+    let o = FavoritesService.favorites.albums.find((p) => p === id);
     if (o !== undefined)
       throw new HttpException('Track is already in albums', HttpStatus.UNPROCESSABLE_ENTITY);
 
-    this.favorites.albums.push(id);
+    FavoritesService.favorites.albums.push(id);
   }
 
   findAll(): Favorite {
-    return this.favorites;
+    return FavoritesService.favorites;
   }
 }

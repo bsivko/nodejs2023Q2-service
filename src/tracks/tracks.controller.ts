@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, HttpException, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, HttpException, Put, Header } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { ReplaceTrackDto, UpdateTrackDto } from './dto/update-track.dto';
@@ -10,11 +10,13 @@ export class TracksController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Header("content-type", "application/json")
   create(@Body() createTrackDto: CreateTrackDto) {
     return this.tracksService.create(createTrackDto);
   }
 
   @Get()
+  @Header("content-type", "application/json")
   findAll() {
     return this.tracksService.findAll();
   }
@@ -32,6 +34,7 @@ export class TracksController {
   }
 
   @Put(':id')
+  @Header("content-type", "application/json")
   replace(@Param('id') id: string, @Body() replaceTrackDto: ReplaceTrackDto) {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
@@ -40,6 +43,7 @@ export class TracksController {
   }
 
   @Delete(':id')
+  @Header("content-type", "application/json")
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     if (!isUUID(id))

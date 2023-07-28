@@ -11,14 +11,15 @@ export class UsersService {
 
   create(createUserDto: CreateUserDto) {
     const now = Date.now();
-    this.users.push({
+    const o = {
       ...createUserDto,
       id: crypto.randomUUID(),
       version: 1,
       createdAt: now,
       updatedAt: now,
-    });
-    return `Added a new user ${createUserDto.login}`;
+    };
+    this.users.push(o);
+    return o;
   }
 
   findAll(): User[] {

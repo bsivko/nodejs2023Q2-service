@@ -9,12 +9,12 @@ export class TracksService {
   private static tracks: Track[] = [];
 
   create(createTrackDto: CreateTrackDto) {
-    const id = crypto.randomUUID();
-    TracksService.tracks.push({
+    const o = {
       ...createTrackDto,
-      id: id
-    });
-    return `Added a new track ${createTrackDto.name} ${id}`;
+      id: crypto.randomUUID()
+    };
+    TracksService.tracks.push(o);
+    return o;
   }
 
   findAll(): Track[] {
@@ -32,7 +32,7 @@ export class TracksService {
 
     replaceTrack(o, replaceTrackDto);
 
-    return `Track #${id} had been replaced.`;
+    return o;
   }
 
   remove(id: string) {
