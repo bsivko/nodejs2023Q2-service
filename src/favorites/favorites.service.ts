@@ -1,26 +1,87 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Favorite } from './entities/favorite.entity';
+import { AlbumsService } from 'src/albums/albums.service';
+import { TracksService } from 'src/tracks/tracks.service';
+import { ArtistsService } from 'src/artists/artists.service';
 
 @Injectable()
 export class FavoritesService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
+
+  private favorites: Favorite = new Favorite();
+  @Inject(TracksService)
+  private readonly tracksService: TracksService;
+  @Inject(AlbumsService)
+  private readonly albumsService: AlbumsService;
+  @Inject(ArtistsService)
+  private readonly artistsService: ArtistsService;
+
+  removeTrack(id: string) {
+    let o = this.favorites.tracks.find((p) => p === id);
+    if (o === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    this.favorites.tracks = this.favorites.tracks.filter(function (item) {
+      return item !== id
+    })
   }
 
-  findAll() {
-    return `This action returns all favorites`;
+  removeAlbum(id: string) {
+    let o = this.favorites.albums.find((p) => p === id);
+    if (o === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    this.favorites.albums = this.favorites.albums.filter(function (item) {
+      return item !== id
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
+  removeArtist(id: string) {
+    let o = this.favorites.artists.find((p) => p === id);
+    if (o === undefined)
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+
+    this.favorites.artists = this.favorites.artists.filter(function (item) {
+      return item !== id
+    })
   }
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
+  addTrack(id: string) {
+    if (this.tracksService.findOne(id) === undefined) {
+      throw new HttpException('Track is not found', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    let o = this.favorites.tracks.find((p) => p === id);
+    if (o !== undefined)
+      throw new HttpException('Track is already in favorites', HttpStatus.UNPROCESSABLE_ENTITY);
+
+    this.favorites.tracks.push(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+  addArtist(id: string) {
+    if (this.artistsService.findOne(id) === undefined) {
+      throw new HttpException('Artist is not found', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    let o = this.favorites.artists.find((p) => p === id);
+    if (o !== undefined)
+      throw new HttpException('Track is already in artists', HttpStatus.UNPROCESSABLE_ENTITY);
+
+    this.favorites.artists.push(id);
+  }
+
+  addAlbum(id: string) {
+    if (this.albumsService.findOne(id) === undefined) {
+      throw new HttpException('Album is not found', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    let o = this.favorites.albums.find((p) => p === id);
+    if (o !== undefined)
+      throw new HttpException('Track is already in albums', HttpStatus.UNPROCESSABLE_ENTITY);
+
+    this.favorites.albums.push(id);
+  }
+
+  findAll(): Favorite {
+    return this.favorites;
   }
 }

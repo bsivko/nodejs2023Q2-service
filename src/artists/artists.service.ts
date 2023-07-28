@@ -7,26 +7,27 @@ import * as crypto from 'crypto';
 @Injectable()
 export class ArtistsService {
 
-  private artists: Artist[] = [];
+  private static artists: Artist[] = [];
 
   create(createArtistDto: CreateArtistDto) {
-    this.artists.push({
+    const id = crypto.randomUUID();
+    ArtistsService.artists.push({
       ...createArtistDto,
-      id: crypto.randomUUID()
+      id: id
     });
-    return `Added a new artist ${createArtistDto.name}`;
+    return `Added a new artist ${createArtistDto.name} : ${id}`;
   }
 
   findAll(): Artist[] {
-    return this.artists;
+    return ArtistsService.artists;
   }
 
   findOne(id: string): Artist {
-    return this.artists.find((p) => p.id === id);
+    return ArtistsService.artists.find((p) => p.id === id);
   }
 
   replace(id: string, replaceArtistDto: ReplaceArtistDto) {
-    let o = this.artists.find((p) => p.id === id);
+    let o = ArtistsService.artists.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
@@ -36,11 +37,11 @@ export class ArtistsService {
   }
 
   remove(id: string) {
-    let o = this.artists.find((p) => p.id === id);
+    let o = ArtistsService.artists.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    this.artists = this.artists.filter(function (item) {
+    ArtistsService.artists = ArtistsService.artists.filter(function (item) {
       return item.id !== id
     })
 

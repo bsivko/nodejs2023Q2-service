@@ -6,26 +6,27 @@ import * as crypto from 'crypto';
 
 @Injectable()
 export class AlbumsService {
-  private albums: Album[] = [];
+  private static albums: Album[] = [];
 
   create(createAlbumDto: CreateAlbumDto) {
-    this.albums.push({
+    const id = crypto.randomUUID();
+    AlbumsService.albums.push({
       ...createAlbumDto,
-      id: crypto.randomUUID()
+      id: id
     });
-    return `Added a new album ${createAlbumDto.name}`;
+    return `Added a new album ${createAlbumDto.name} : ${id}`;
   }
 
   findAll(): Album[] {
-    return this.albums;
+    return AlbumsService.albums;
   }
 
   findOne(id: string): Album {
-    return this.albums.find((p) => p.id === id);
+    return AlbumsService.albums.find((p) => p.id === id);
   }
 
   replace(id: string, replaceDto: ReplaceAlbumDto) {
-    let o = this.albums.find((p) => p.id === id);
+    let o = AlbumsService.albums.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
@@ -35,11 +36,11 @@ export class AlbumsService {
   }
 
   remove(id: string) {
-    let o = this.albums.find((p) => p.id === id);
+    let o = AlbumsService.albums.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    this.albums = this.albums.filter(function (item) {
+    AlbumsService.albums = AlbumsService.albums.filter(function (item) {
       return item.id !== id
     })
 

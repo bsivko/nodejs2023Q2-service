@@ -6,26 +6,27 @@ import * as crypto from 'crypto';
 
 @Injectable()
 export class TracksService {
-  private tracks: Track[] = [];
+  private static tracks: Track[] = [];
 
   create(createTrackDto: CreateTrackDto) {
-    this.tracks.push({
+    const id = crypto.randomUUID();
+    TracksService.tracks.push({
       ...createTrackDto,
-      id: crypto.randomUUID()
+      id: id
     });
-    return `Added a new track ${createTrackDto.name}`;
+    return `Added a new track ${createTrackDto.name} ${id}`;
   }
 
   findAll(): Track[] {
-    return this.tracks;
+    return TracksService.tracks;
   }
 
   findOne(id: string): Track {
-    return this.tracks.find((p) => p.id === id);
+    return TracksService.tracks.find((p) => p.id === id);
   }
 
   replace(id: string, replaceTrackDto: ReplaceTrackDto) {
-    let o = this.tracks.find((p) => p.id === id);
+    let o = TracksService.tracks.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
@@ -35,11 +36,11 @@ export class TracksService {
   }
 
   remove(id: string) {
-    let o = this.tracks.find((p) => p.id === id);
+    let o = TracksService.tracks.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
-    this.tracks = this.tracks.filter(function (item) {
+    TracksService.tracks = TracksService.tracks.filter(function (item) {
       return item.id !== id
     })
 
