@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from "./dto/create-user.dto";
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as crypto from 'crypto';
 
 @Injectable()
 export class UsersService {
-
   private users: User[] = [];
 
   create(createUserDto: CreateUserDto) {
@@ -32,7 +31,7 @@ export class UsersService {
   }
 
   updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
-    let o = this.users.find((p) => p.id === id);
+    const o = this.users.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
@@ -47,13 +46,13 @@ export class UsersService {
   }
 
   remove(id: string) {
-    let o = this.users.find((p) => p.id === id);
+    const o = this.users.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
     this.users = this.users.filter(function (item) {
-      return item.id !== id
-    })
+      return item.id !== id;
+    });
 
     return `User #${id} had been deleted.`;
   }

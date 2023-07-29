@@ -1,18 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, HttpException, Put, Header } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  HttpException,
+  Put,
+  Header,
+} from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
-import { ReplaceTrackDto, UpdateTrackDto } from './dto/update-track.dto';
+import { ReplaceTrackDto } from './dto/update-track.dto';
 import { isUUID } from 'class-validator';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 import { Track } from './entities/track.entity';
 
 @Controller('track')
 export class TracksController {
-  constructor(private readonly tracksService: TracksService) { }
+  constructor(private readonly tracksService: TracksService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiBadRequestResponse({ description: 'Body is incorrect.' })
   @ApiCreatedResponse({ type: Track, description: 'Track created.' })
   create(@Body() createTrackDto: CreateTrackDto) {
@@ -20,14 +38,14 @@ export class TracksController {
   }
 
   @Get()
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiOkResponse({ description: 'All founded.' })
   findAll() {
     return this.tracksService.findAll();
   }
 
   @Get(':id')
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
   @ApiNotFoundResponse({ description: 'Track not found.' })
   @ApiOkResponse({ type: Track, description: 'Track found.' })
@@ -43,7 +61,7 @@ export class TracksController {
   }
 
   @Put(':id')
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
   @ApiNotFoundResponse({ description: 'Track not found.' })
   @ApiOkResponse({ type: Track, description: 'Track changed.' })
@@ -55,7 +73,7 @@ export class TracksController {
   }
 
   @Delete(':id')
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
   @ApiNotFoundResponse({ description: 'Track not found.' })
   @ApiNoContentResponse({ description: 'Track deleted.' })

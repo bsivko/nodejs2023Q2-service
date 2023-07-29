@@ -1,33 +1,51 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, HttpStatus, HttpException, Put, Header } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  HttpException,
+  Put,
+  Header,
+} from '@nestjs/common';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { ReplaceAlbumDto } from './dto/update-album.dto';
 import { isUUID } from 'class-validator';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 import { Album } from './entities/album.entity';
 
 @Controller('album')
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) { }
+  constructor(private readonly albumsService: AlbumsService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({ type: Album, description: 'Created album.' })
   @ApiBadRequestResponse({ description: 'Body is incorrect.' })
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
   }
 
   @Get()
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiOkResponse({ description: 'All founded.' })
   findAll() {
     return this.albumsService.findAll();
   }
 
   @Get(':id')
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
   @ApiNotFoundResponse({ description: 'Album not found.' })
   @ApiOkResponse({ type: Album, description: 'Album found.' })
@@ -43,7 +61,7 @@ export class AlbumsController {
   }
 
   @Put(':id')
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
   @ApiNotFoundResponse({ description: 'Album not found.' })
   @ApiOkResponse({ description: 'Album changed.' })
@@ -59,7 +77,7 @@ export class AlbumsController {
   @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
   @ApiNotFoundResponse({ description: 'Album not found.' })
   @ApiNoContentResponse({ description: 'Album deleted.' })
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   remove(@Param('id') id: string) {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);

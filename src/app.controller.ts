@@ -4,10 +4,10 @@ import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService) {}
 
   @Get()
-  @Header("content-type", "application/json")
+  @Header('content-type', 'application/json')
   @ApiOkResponse({ description: 'Health checked, hello world returned.' })
   getHello(): string {
     return this.appService.getHello();

@@ -8,13 +8,12 @@ import { TracksService } from 'src/tracks/tracks.service';
 
 @Injectable()
 export class AlbumsService {
-
   private static albums: Album[] = [];
 
   create(createAlbumDto: CreateAlbumDto) {
     const o = {
       ...createAlbumDto,
-      id: crypto.randomUUID()
+      id: crypto.randomUUID(),
     };
     AlbumsService.albums.push(o);
     return o;
@@ -29,7 +28,7 @@ export class AlbumsService {
   }
 
   replace(id: string, replaceDto: ReplaceAlbumDto) {
-    let o = AlbumsService.albums.find((p) => p.id === id);
+    const o = AlbumsService.albums.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
@@ -39,7 +38,7 @@ export class AlbumsService {
   }
 
   remove(id: string) {
-    let o = AlbumsService.albums.find((p) => p.id === id);
+    const o = AlbumsService.albums.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
@@ -47,16 +46,15 @@ export class AlbumsService {
     TracksService.removeAlumId(id);
 
     AlbumsService.albums = AlbumsService.albums.filter(function (item) {
-      return item.id !== id
-    })
+      return item.id !== id;
+    });
 
     return `Artist #${id} had been deleted.`;
   }
 
   static removeArtistId(id: string) {
     AlbumsService.albums.forEach((o) => {
-      if (o.artistId === id)
-        o.artistId = null;
+      if (o.artistId === id) o.artistId = null;
     });
   }
 }

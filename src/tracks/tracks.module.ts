@@ -7,6 +7,6 @@ import { ArtistsService } from 'src/artists/artists.service';
 
 @Module({
   controllers: [TracksController],
-  providers: [TracksService, FavoritesService, AlbumsService, ArtistsService]
+  providers: [TracksService, FavoritesService, AlbumsService, ArtistsService],
 })
-export class TracksModule { }
+export class TracksModule {}

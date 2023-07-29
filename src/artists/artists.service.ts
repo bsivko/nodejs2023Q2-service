@@ -8,13 +8,12 @@ import { AlbumsService } from 'src/albums/albums.service';
 
 @Injectable()
 export class ArtistsService {
-
   private static artists: Artist[] = [];
 
   create(createArtistDto: CreateArtistDto) {
     const o = {
       ...createArtistDto,
-      id: crypto.randomUUID()
+      id: crypto.randomUUID(),
     };
     ArtistsService.artists.push(o);
     return o;
@@ -29,7 +28,7 @@ export class ArtistsService {
   }
 
   replace(id: string, replaceArtistDto: ReplaceArtistDto) {
-    let o = ArtistsService.artists.find((p) => p.id === id);
+    const o = ArtistsService.artists.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
@@ -39,13 +38,13 @@ export class ArtistsService {
   }
 
   remove(id: string) {
-    let o = ArtistsService.artists.find((p) => p.id === id);
+    const o = ArtistsService.artists.find((p) => p.id === id);
     if (o === undefined)
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
 
     ArtistsService.artists = ArtistsService.artists.filter(function (item) {
-      return item.id !== id
-    })
+      return item.id !== id;
+    });
 
     AlbumsService.removeArtistId(id);
     TracksService.removeArtistId(id);
