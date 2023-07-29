@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
@@ -17,6 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { isUUID } from '../utils/uuid';
 import { UserResponse } from './entities/user.entity';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiResponse } from '@nestjs/swagger';
 
 @Controller('user')
 export class UsersController {
@@ -25,12 +25,15 @@ export class UsersController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header("content-type", "application/json")
+  @ApiBadRequestResponse({ description: 'Body is incorrect.' })
+  @ApiCreatedResponse({ type: UserResponse, description: 'The record has been successfully created.' })
   create(@Body() createUserDto: CreateUserDto) {
     return new UserResponse(this.usersService.create(createUserDto));
   }
 
   @Get()
   @Header("content-type", "application/json")
+  @ApiOkResponse({ description: 'All founded.' })
   findAll(): UserResponse[] {
     const all = this.usersService.findAll();
     let result = [];
@@ -42,6 +45,9 @@ export class UsersController {
 
   @Get(':id')
   @Header("content-type", "application/json")
+  @ApiOkResponse({ type: UserResponse, description: 'Get successfully proceed.' })
+  @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
+  @ApiNotFoundResponse({ description: 'User not found.' })
   findOne(@Param('id') id: string): UserResponse {
     if (!isUUID(id)) {
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
@@ -55,6 +61,9 @@ export class UsersController {
 
   @Put(':id')
   @Header("content-type", "application/json")
+  @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
+  @ApiNotFoundResponse({ description: 'User not found.' })
+  @ApiOkResponse({ type: UserResponse, description: 'User password updated.' })
   update(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
@@ -69,6 +78,9 @@ export class UsersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   @Header("content-type", "application/json")
+  @ApiBadRequestResponse({ description: 'UUID is incorrect.' })
+  @ApiNotFoundResponse({ description: 'User not found.' })
+  @ApiNoContentResponse({ description: 'User deleted.' })
   remove(@Param('id') id: string) {
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);

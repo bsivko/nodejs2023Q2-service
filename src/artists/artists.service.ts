@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
-import { ReplaceArtistDto, UpdateArtistDto } from './dto/update-artist.dto';
+import { ReplaceArtistDto } from './dto/update-artist.dto';
 import { Artist, replaceArtist } from './entities/artist.entity';
 import * as crypto from 'crypto';
 import { TracksService } from 'src/tracks/tracks.service';

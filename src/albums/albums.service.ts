@@ -1,6 +1,6 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
-import { ReplaceAlbumDto, UpdateAlbumDto } from './dto/update-album.dto';
+import { ReplaceAlbumDto } from './dto/update-album.dto';
 import { Album, replaceAlbum } from './entities/album.entity';
 import * as crypto from 'crypto';
 import { FavoritesService } from 'src/favorites/favorites.service';
