@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        - DB_URL=${DB_URL}
+    depends_on:
+      - db
+    env_file:
+      - .env
+    container_name: api_app
+    volumes:
+      - ./src:/usr/src/app/src
+      - app_logs:/usr/src/app/logs
+    environment:
+      DB_URL: ${DB_URL}
+      NODE_ENV: development
+      PORT: ${PORT}
+    ports:
+      - '${PORT}:${PORT}'
+    networks:
+      - default
+    restart: always
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    expose:
+      - 5432
+    networks:
+      - default
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql
+
+volumes:
+  postgres_data:
+  postgres_logs:
+  app_logs:
+
+networks:
+  default:
+    driver: bridge
