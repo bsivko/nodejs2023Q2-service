@@ -21,6 +21,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  console.log('AppDataSource.initialize starts');
+
   AppDataSource.initialize()
     .then(() => {
       // here you can start to work with your database
