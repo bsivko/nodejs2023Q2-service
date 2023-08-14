@@ -5,10 +5,17 @@ import { Album, replaceAlbum } from './entities/album.entity';
 import * as crypto from 'crypto';
 import { FavoritesService } from 'src/favorites/favorites.service';
 import { TracksService } from 'src/tracks/tracks.service';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AlbumsService {
   private static albums: Album[] = [];
+
+  constructor(
+    @InjectRepository(Album)
+    private albumsRepository: Repository<Album>,
+  ) {}
 
   create(createAlbumDto: CreateAlbumDto) {
     const o = {

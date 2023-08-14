@@ -5,10 +5,19 @@ import { Artist, replaceArtist } from './entities/artist.entity';
 import * as crypto from 'crypto';
 import { TracksService } from 'src/tracks/tracks.service';
 import { AlbumsService } from 'src/albums/albums.service';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ArtistsService {
   private static artists: Artist[] = [];
+
+  constructor(
+    @InjectRepository(Artist)
+    private artistsRepository: Repository<Artist>,
+  ) {
+    console.log("ArtistsService c'tor");
+  }
 
   create(createArtistDto: CreateArtistDto) {
     const o = {
@@ -16,14 +25,17 @@ export class ArtistsService {
       id: crypto.randomUUID(),
     };
     ArtistsService.artists.push(o);
+    console.log('Artist create');
     return o;
   }
 
   findAll(): Artist[] {
+    console.log('Artist findAll');
     return ArtistsService.artists;
   }
 
   findOne(id: string): Artist {
+    console.log('Artist findOne');
     return ArtistsService.artists.find((p) => p.id === id);
   }
 

@@ -3,10 +3,19 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { ReplaceTrackDto } from './dto/update-track.dto';
 import { Track, replaceTrack } from './entities/track.entity';
 import * as crypto from 'crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TracksService {
   private static tracks: Track[] = [];
+
+  constructor(
+    @InjectRepository(Track)
+    private tracksRepository: Repository<Track>,
+  ) {
+    console.log("TracksService c'tor");
+  }
 
   create(createTrackDto: CreateTrackDto) {
     const o = {

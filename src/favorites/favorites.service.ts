@@ -4,6 +4,8 @@ import { AlbumsService } from 'src/albums/albums.service';
 import { TracksService } from 'src/tracks/tracks.service';
 import { ArtistsService } from 'src/artists/artists.service';
 import { FavoriteResponseDto } from './dto/get-favorites.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class FavoritesService {

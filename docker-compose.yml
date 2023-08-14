@@ -5,18 +5,15 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-      args:
-        - DB_URL=${DB_URL}
     depends_on:
       - db
     env_file:
       - .env
-    container_name: api_app
+    container_name: api
     volumes:
       - ./src:/usr/src/app/src
       - app_logs:/usr/src/app/logs
     environment:
-      DB_URL: ${DB_URL}
       NODE_ENV: development
       PORT: ${PORT}
     ports:

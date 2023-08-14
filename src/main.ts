@@ -1,11 +1,14 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppDataSource, AppModule } from './app.module';
 import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
 
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
+  console.log('App starts...');
+
   const app = await NestFactory.create(AppModule);
   const port = parseInt(process.env.PORT, 10) || 4000;
   app.useGlobalPipes(new ValidationPipe());
@@ -17,6 +20,13 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  AppDataSource.initialize()
+    .then(() => {
+      // here you can start to work with your database
+      console.log('DB initialized!');
+    })
+    .catch((error) => console.log(error));
 
   await app.listen(port);
 }
