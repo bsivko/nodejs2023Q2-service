@@ -9,6 +9,13 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   console.log('App starts...');
 
+  AppDataSource.initialize()
+    .then(() => {
+      // here you can start to work with your database
+      console.log('DB initialized!');
+    })
+    .catch((error) => console.log(error));
+
   const app = await NestFactory.create(AppModule);
   const port = parseInt(process.env.PORT, 10) || 4000;
   app.useGlobalPipes(new ValidationPipe());
@@ -20,15 +27,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  console.log('AppDataSource.initialize starts');
-
-  AppDataSource.initialize()
-    .then(() => {
-      // here you can start to work with your database
-      console.log('DB initialized!');
-    })
-    .catch((error) => console.log(error));
 
   await app.listen(port);
 }

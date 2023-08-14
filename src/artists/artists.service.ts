@@ -25,12 +25,10 @@ export class ArtistsService {
       id: crypto.randomUUID(),
     };
     ArtistsService.artists.push(o);
-    console.log('Artist create');
     return o;
   }
 
   findAll(): Artist[] {
-    console.log('Artist findAll');
     return ArtistsService.artists;
   }
 

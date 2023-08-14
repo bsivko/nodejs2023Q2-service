@@ -7,7 +7,6 @@ import { ArtistsModule } from './artists/artists.module';
 import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
 import { Album } from 'src/albums/entities/album.entity';
 import { Artist } from 'src/artists/entities/artist.entity';
 import { Track } from 'src/tracks/entities/track.entity';
@@ -32,7 +31,6 @@ export const AppDataSource = new DataSource(_DBOptions);
 @Module({
   imports: [
     TypeOrmModule.forRoot(_DBOptions),
-    ConfigModule.forRoot(),
     UsersModule,
     TracksModule,
     ArtistsModule,

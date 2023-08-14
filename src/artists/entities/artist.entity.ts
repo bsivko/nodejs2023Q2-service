@@ -1,26 +1,26 @@
 import { IsBoolean, IsString } from 'class-validator';
 import { ReplaceArtistDto } from '../dto/update-artist.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 Entity();
 export class Artist {
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty({
     type: 'string',
     example: '"fc638392-c772-46f4-ab7c-c33abe03d718"',
   })
-  @PrimaryGeneratedColumn('uuid')
   @IsString()
   id: string; // uuid v4
 
+  @Column()
   @ApiProperty({ type: 'string', example: '"Captain Jack"' })
   @IsString()
-  @Column()
   name: string;
 
+  @Column()
   @ApiProperty({ type: 'boolean', example: 'true' })
   @IsBoolean()
-  @Column()
   grammy: boolean;
 }
 

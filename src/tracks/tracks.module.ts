@@ -13,5 +13,6 @@ import { Artist } from 'src/artists/entities/artist.entity';
   controllers: [TracksController],
   imports: [TypeOrmModule.forFeature([Track, Album, Artist])],
   providers: [TracksService, FavoritesService, AlbumsService, ArtistsService],
+  exports: [TracksService],
 })
 export class TracksModule {}

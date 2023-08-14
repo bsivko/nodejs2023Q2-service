@@ -7,9 +7,13 @@
 
 ## Downloading
 
+URL below is likely https://github.com/bsivko/nodejs2023Q2-service.git for HTTPS protocol:
+
 ```
 git clone {repository URL}
 ```
+
+And switch to `dev-nest-js-2` branch.
 
 ## Installing NPM modules
 
@@ -19,8 +23,10 @@ npm install
 
 ## Running application
 
+Build and run:
+
 ```
-docker-compose up
+docker-compose up -d --build
 ```
 
 ## Testing
