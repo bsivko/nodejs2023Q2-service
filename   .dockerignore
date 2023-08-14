@@ -1,4 +1,6 @@
-node_module
+node_modules
 .git
 README.md
 Dockerfile
+.dockerignore
+.env
