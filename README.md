@@ -7,9 +7,13 @@
 
 ## Downloading
 
+URL below is likely https://github.com/bsivko/nodejs2023Q2-service.git for HTTPS protocol:
+
 ```
 git clone {repository URL}
 ```
+
+And switch to `dev-nest-js-2` branch.
 
 ## Installing NPM modules
 
@@ -19,40 +23,24 @@ npm install
 
 ## Running application
 
-```
-npm start
-```
+Build and run:
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+```
+docker-compose up -d --build
+```
 
 ## Testing
 
 After application running open new terminal and enter:
 
-To run all tests without authorization
-
 ```
 npm run test
 ```
 
-To run only one of all test suites
+### Vulnerabilities checking
 
 ```
-npm run test -- <path to suite>
-```
-
-To run all test with authorization
-
-```
-npm run test:auth
-```
-
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
+npm run start:scout
 ```
 
 ### Auto-fix and format
@@ -70,3 +58,15 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+## Open API Doc Generation
+
+Run
+
+```
+npm run start
+```
+
+And go to `http://localhost:PORT/api-yaml` page in your browser (PORT depends on your `.env` file).
+
+Last generated doc see updated in `/doc/api.yaml`.
