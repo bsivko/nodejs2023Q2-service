@@ -7,7 +7,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { MyLogger } from './utils/logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new MyLogger(),
+  });
+
   const port = parseInt(process.env.PORT, 10) || 4000;
   app.useGlobalPipes(new ValidationPipe());
 
