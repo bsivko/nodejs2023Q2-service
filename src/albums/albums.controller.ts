@@ -23,6 +23,7 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { Album } from './entities/album.entity';
+import { loggerX } from 'src/utils/logger';
 
 @Controller('album')
 export class AlbumsController {
@@ -34,6 +35,7 @@ export class AlbumsController {
   @ApiBadRequestResponse({ description: 'Body is incorrect.' })
   @Header('content-type', 'application/json')
   create(@Body() createAlbumDto: CreateAlbumDto) {
+    loggerX.getLogger().log('POST Album:', { createAlbumDto });
     return this.albumsService.create(createAlbumDto);
   }
 
@@ -41,6 +43,7 @@ export class AlbumsController {
   @Header('content-type', 'application/json')
   @ApiOkResponse({ description: 'All founded.' })
   findAll() {
+    loggerX.getLogger().log('GET All Album');
     return this.albumsService.findAll();
   }
 
@@ -50,6 +53,8 @@ export class AlbumsController {
   @ApiNotFoundResponse({ description: 'Album not found.' })
   @ApiOkResponse({ type: Album, description: 'Album found.' })
   findOne(@Param('id') id: string) {
+    loggerX.getLogger().log('GET Album:', { id });
+
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
 
@@ -66,6 +71,8 @@ export class AlbumsController {
   @ApiNotFoundResponse({ description: 'Album not found.' })
   @ApiOkResponse({ description: 'Album changed.' })
   update(@Param('id') id: string, @Body() replaceAlbumDto: ReplaceAlbumDto) {
+    loggerX.getLogger().log('PUT Album:', { id, replaceAlbumDto });
+
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
 
@@ -79,6 +86,8 @@ export class AlbumsController {
   @ApiNoContentResponse({ description: 'Album deleted.' })
   @Header('content-type', 'application/json')
   remove(@Param('id') id: string) {
+    loggerX.getLogger().log('DELETE Album:', { id });
+
     if (!isUUID(id))
       throw new HttpException('ID is not UUID', HttpStatus.BAD_REQUEST);
 
